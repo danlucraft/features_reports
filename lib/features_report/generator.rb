@@ -10,7 +10,7 @@ module FeaturesReport
     attr_reader :pdf, :reader, :opts
 
     def generate
-      @pdf = Prawn::Document.new
+      @pdf = Prawn::Document.new :page_size => "A4"
 
       pdf.header [pdf.bounds.right, pdf.bounds.bottom + 10] do
         pdf.text pdf.page_count-1 unless pdf.page_count == 1
@@ -59,8 +59,6 @@ module FeaturesReport
 
       pdf.move_down 35
       pdf.table data, :border_width => 0, :widths => {0 => 30, 1 => 450, 2 => 30}
-      
-      start_new_page
     end
 
     def clear_footer
