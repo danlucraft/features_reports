@@ -17,7 +17,7 @@ describe FeaturesReport::Reader do
 
   it "should load the scenarios" do
     login_feature = @reader.features.detect {|f| f.title == "Log in to the site"}
-    login_feature.scenarios.length.should == 4
+    login_feature.scenarios.length.should == 8
     login_scenario = login_feature.scenarios.last
     login_scenario.name.should == "Log in with bad password and then log in"
   end

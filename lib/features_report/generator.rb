@@ -11,9 +11,12 @@ module FeaturesReport
 
     def generate
       @pdf = Prawn::Document.new
-      pdf.header pdf.bounds.bottom_right do
+
+      pdf.header [pdf.bounds.right, pdf.bounds.bottom + 10] do
         pdf.text pdf.page_count-1 unless pdf.page_count == 1
       end
+
+      @original_bottom_left = [pdf.bounds.left, pdf.bounds.bottom - 10]
 
       generate_front_page
       
@@ -25,31 +28,24 @@ module FeaturesReport
       pdf.render_file("features.pdf")
     end
 
-    FEATURE_TITLE_STYLE = {
-      :size => 24
-    }
-
-    SCENARIO_TITLE_STYLE = {
-      :size => 16
-    }
-
-    STEP_STYLE = {
-    }
-
-    FOOTER_STYLE = {
-      :size => 12
-    }
+    FEATURE_TITLE_STYLE = {:size => 24}
+    SCENARIO_TITLE_STYLE = {:size => 16}
+    STEP_STYLE = {}
+    FOOTER_STYLE = {:size => 12}
+    DOC_TITLE_STYLE = {:size => 32, :align => :center}
 
     private
 
     def generate_front_page
       pdf.move_down(200)
+
       if opts[:logo]
         pdf.image opts[:logo]
       end
-      pdf.text "Features Report", :size => 32, :align => :center
+
+      pdf.text "Features Report", DOC_TITLE_STYLE
       
-      pdf.start_new_page
+      start_new_page
     end
 
     def generate_contents_page
@@ -64,7 +60,7 @@ module FeaturesReport
       pdf.move_down 35
       pdf.table data, :border_width => 0, :widths => {0 => 30, 1 => 450, 2 => 30}
       
-      pdf.start_new_page
+      start_new_page
     end
 
     def clear_footer
@@ -74,7 +70,7 @@ module FeaturesReport
     def generate_feature(feature)
       pdf.text "Feature: " + feature.title, FEATURE_TITLE_STYLE
 
-      pdf.footer pdf.bounds.bottom_left do 
+      pdf.footer @original_bottom_left do 
         pdf.text feature.title, FOOTER_STYLE
       end
 
@@ -92,7 +88,11 @@ module FeaturesReport
         pdf.move_down 10
       end
       
-      pdf.start_new_page
+      start_new_page
+    end
+
+    def start_new_page
+      pdf.start_new_page(:bottom_margin => 60)
     end
 
   end
