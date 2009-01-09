@@ -112,11 +112,11 @@ module FeaturesReport
 
       sorted_features.each_with_index do |feature, index|
         if @git
-          data << [index + 1, feature.contents_text, feature.last_changed.strftime("%e %b"), feature.last_author.split.map{|word| word[0..0].upcase}.join, @feature_pages[feature]] 
+          data << [index + 1, feature.title, feature.last_changed.strftime("%e %b"), feature.last_author.split.map{|word| word[0..0].upcase}.join, @feature_pages[feature]] 
           widths = {0 => 30, 1 => 340, 2 => 70, 3 => 40, 4 => 40}
           headers = ["", "Title", "Last Changed", "By", "Page"]
         else
-          data << [index + 1, feature.contents_text, @feature_pages[feature]] 
+          data << [index + 1, feature.title, @feature_pages[feature]] 
           widths = {0 => 30, 1 => 470, 2 => 30}
           headers = ["", "", ""]
         end
