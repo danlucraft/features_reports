@@ -17,8 +17,13 @@ module FeaturesReport
       @files = files
     end
 
-    def last_changed(feature)
-      @repo.log(feature.file).first.date
+    def git_dir
+      @repo.path.split("/")[0..-2].join("/")
+    end
+
+    def last_commit(feature)
+      filename = File.expand_path(feature.file, git_dir).gsub(/^#{Regexp.escape(git_dir)}\//, "")
+      commit = @repo.log(@repo.head.name, filename).first
     end
 
     attr_reader :files

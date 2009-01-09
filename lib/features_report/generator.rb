@@ -6,6 +6,7 @@ module FeaturesReport
       @opts = opts
       @git = git
       @feature_pages ||= {}
+      @features = reader.features.map{|f| Feature.new(f, @git)}
     end
 
     attr_reader :pdf, :reader, :opts
@@ -21,7 +22,7 @@ module FeaturesReport
 
       generate_front_page
       
-      reader.features.each do |feature| 
+      sorted_features.each do |feature| 
         generate_feature(feature)
       end
       
@@ -51,21 +52,74 @@ module FeaturesReport
       start_new_page
     end
 
+    class Feature
+      def initialize(feature, git)
+        @feature = feature
+        @git = git
+      end
+
+      def header
+        @feature.header
+      end
+
+      def last_commit
+        @last_commit ||= @git.last_commit(@feature)
+      end
+
+      def last_changed
+        last_commit.date
+      end
+
+      def last_author
+        last_commit.author.name
+      end
+
+      def scenarios
+        @feature.scenarios
+      end
+
+      def title
+        @feature.title
+      end
+    end
+
+    def sorted_features
+      return @sorted_features if @sorted_features
+
+      @sorted_features = @features.sort_by do |feature| 
+        if @git
+          feature.last_changed
+        else
+          feature.title
+        end
+      end
+      
+      @sorted_features = @sorted_features.reverse if @git
+
+      @sorted_features
+    end
+
     def generate_contents_page
       clear_footer
       pdf.text "Contents", :size => 20, :align => :center
 
       data = []
-      reader.features.each_with_index do |feature, i|
+      widths, headers = nil, nil
+
+      sorted_features.each_with_index do |feature, index|
         if @git
-          data << [i+1, feature.title, @git.last_changed(feature).strftime("%e %b"), @feature_pages[feature]]
+          data << [index + 1, feature.title, feature.last_changed.strftime("%e %b"), feature.last_author.split.map{|word| word[0..0].upcase}.join, @feature_pages[feature]] 
+          widths = {0 => 30, 1 => 340, 2 => 70, 3 => 40, 4 => 40}
+          headers = ["", "Title", "Last Changed", "By", "Page"]
         else
-          data << [i+1, feature.title, "", @feature_pages[feature]]       
+          data << [index + 1, feature.title, @feature_pages[feature]] 
+          widths = {0 => 30, 1 => 470, 2 => 30}
+          headers = ["", "", ""]
         end
       end
 
       pdf.move_down 35
-      pdf.table data, :border_width => 0, :widths => {0 => 30, 1 => 360, 2 => 100, 3 => 30}, :headers => ["", "", "Last Changed", ""]
+      pdf.table data, :border_width => 0, :widths => widths, :headers => headers
     end
 
     def clear_footer
