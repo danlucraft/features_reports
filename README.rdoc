@@ -14,8 +14,7 @@ Generates a PDF report of a set of Cucumber features.
  * Lists features and scenarios
  * Table of contents
  * Your logo on the front page
- * Index
- * Annotates scenarios with authorship date and "new!" comments (git only)
+ * Annotates scenarios with authorship date last changed by comments (git only)
 
 == SYNOPSIS:
 
@@ -27,7 +26,7 @@ Generates a PDF report of a set of Cucumber features.
  * Cucumber
  * Prawn
  * Grit (optional, needed for git only features)
- * RSpec (options, needed to run specs)
+ * RSpec (optional, needed to run specs)
 
 == INSTALL:
 
