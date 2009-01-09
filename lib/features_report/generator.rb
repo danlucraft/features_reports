@@ -31,7 +31,6 @@ module FeaturesReport
     }
 
     STEP_STYLE = {
-      :size => 12
     }
 
     private
@@ -69,7 +68,7 @@ module FeaturesReport
         scenario.steps.each do |step|
           next if step.is_a?(Cucumber::Tree::RowStep) # TODO: deal with these
 
-          pdf.text step.name, STEP_STYLE
+          pdf.text step.keyword + " " + step.name, STEP_STYLE
         end
       end
       
