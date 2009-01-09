@@ -18,6 +18,8 @@ module FeaturesReport
       end
     end
 
+    private
+
     def generate_contents_page
       pdf.text "Features Report", :size => 32, :align => :center
       pdf.text "Contents", :size => 16
