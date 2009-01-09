@@ -7,6 +7,10 @@ module FeaturesReport
 end
 
 require 'rubygems'
+require 'prawn'
+
 require 'features_report/reader'
+require 'features_report/generator'
+require 'features_report/cli'
 FeaturesReport::Reader.load_cucumber
 require 'features_report/cucumber/tree/feature'

@@ -3,8 +3,8 @@ module FeaturesReport
   class Reader
     attr_reader :files
 
-    def initialize(glob)
-      @files = Dir[glob]
+    def initialize(files)
+      @files = files
     end
 
     def self.load_cucumber

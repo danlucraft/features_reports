@@ -6,7 +6,7 @@ include FeaturesReport
 describe FeaturesReport::Reader do
   
   before(:each) do
-    @reader = Reader.new(FEATURE_FIXTURES_GLOB)
+    @reader = Reader.new(Dir[FEATURE_FIXTURES_GLOB])
   end
 
   it "should load the features" do
