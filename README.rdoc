@@ -23,8 +23,10 @@ Generates a PDF report of a set of Cucumber features.
 
 == REQUIREMENTS:
 
+ * Cucumber
  * Prawn
  * Grit (optional, needed for git only features)
+ * RSpec (options, needed to run specs)
 
 == INSTALL:
 
