@@ -10,7 +10,7 @@ module FeaturesReport
     attr_reader :pdf, :reader, :opts
 
     def generate
-      @pdf = Prawn::Document.new :page_size => "A4"
+      @pdf = Prawn::Document.new :page_size => "A4", :top_margin => 60
 
       pdf.header [pdf.bounds.right, pdf.bounds.bottom + 10] do
         pdf.text pdf.page_count-1 unless pdf.page_count == 1
@@ -67,6 +67,7 @@ module FeaturesReport
 
     def generate_feature(feature)
       pdf.text "Feature: " + feature.title, FEATURE_TITLE_STYLE
+      pdf.text feature.header.split("\n")[1..-1].join("\n")
 
       pdf.footer @original_bottom_left do 
         pdf.text feature.title, FOOTER_STYLE
