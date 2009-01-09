@@ -10,16 +10,19 @@ module FeaturesReport
     attr_reader :pdf, :reader, :opts
 
     def generate
-      Prawn::Document.generate("features.pdf") do |prawn_pdf|
-        @pdf = prawn_pdf
-        generate_front_page
-
-        reader.features.each do |feature| 
-          generate_feature(feature)
-        end
-
-        generate_contents_page
+      @pdf = Prawn::Document.new
+      pdf.header pdf.bounds.bottom_right do
+        pdf.text pdf.page_count-1 unless pdf.page_count == 1
       end
+
+      generate_front_page
+      
+      reader.features.each do |feature| 
+        generate_feature(feature)
+      end
+      
+      generate_contents_page
+      pdf.render_file("features.pdf")
     end
 
     FEATURE_TITLE_STYLE = {
@@ -31,6 +34,10 @@ module FeaturesReport
     }
 
     STEP_STYLE = {
+    }
+
+    FOOTER_STYLE = {
+      :size => 12
     }
 
     private
@@ -46,6 +53,7 @@ module FeaturesReport
     end
 
     def generate_contents_page
+      clear_footer
       pdf.text "Contents", :size => 20, :align => :center
 
       data = []
@@ -59,20 +67,31 @@ module FeaturesReport
       pdf.start_new_page
     end
 
+    def clear_footer
+      pdf.footer(pdf.bounds.bottom_left) {}
+    end
+
     def generate_feature(feature)
-      pdf.text feature.title, FEATURE_TITLE_STYLE
+      pdf.text "Feature: " + feature.title, FEATURE_TITLE_STYLE
+
+      pdf.footer pdf.bounds.bottom_left do 
+        pdf.text feature.title, FOOTER_STYLE
+      end
+
+      pdf.move_down 20
       @feature_pages[feature] = pdf.page_count-1
       
       feature.scenarios.each do |scenario|
         pdf.text scenario.name, SCENARIO_TITLE_STYLE
+        pdf.move_down 4
         scenario.steps.each do |step|
           next if step.is_a?(Cucumber::Tree::RowStep) # TODO: deal with these
 
           pdf.text step.keyword + " " + step.name, STEP_STYLE
         end
+        pdf.move_down 10
       end
       
-      pdf.text pdf.page_count-1, :at => pdf.bounds.bottom_right
       pdf.start_new_page
     end
 

@@ -1,7 +1,7 @@
 
 = features_report
 
- * Daniel Lucraft (daniellucraft.com)
+ * Daniel Lucraft (daniellucraft.com) and Niko Felger
  * http://features_report.rubyforge.org/
  * sponsored by Songkick.com. Find live music playing near you!
 
