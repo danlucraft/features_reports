@@ -45,6 +45,8 @@ module FeaturesReport
       end
 
       pdf.text "Features Report", DOC_TITLE_STYLE
+      pdf.move_down(10)
+      pdf.text Time.now.strftime("%e %B %Y"), :align => :center
       
       start_new_page
     end
