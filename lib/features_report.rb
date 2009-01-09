@@ -10,8 +10,14 @@ require 'rubygems'
 require 'prawn'
 require 'trollop'
 
+begin
+  require 'grit'
+rescue
+end
+
 require 'features_report/reader'
 require 'features_report/generator'
 require 'features_report/cli'
+require 'features_report/git'
 FeaturesReport::Reader.load_cucumber
 require 'features_report/cucumber/tree/feature'

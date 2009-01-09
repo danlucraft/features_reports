@@ -1,9 +1,10 @@
 
 module FeaturesReport
   class Generator
-    def initialize(reader, opts)
+    def initialize(reader, git, opts)
       @reader = reader
       @opts = opts
+      @git = git
       @feature_pages ||= {}
     end
 
@@ -54,11 +55,15 @@ module FeaturesReport
 
       data = []
       reader.features.each_with_index do |feature, i|
-        data << [i+1, feature.title, @feature_pages[feature]]
+        if @git
+          data << [i+1, feature.title, @git.last_changed(feature).strftime("%e %b"), @feature_pages[feature]]
+        else
+          data << [i+1, feature.title, "", @feature_pages[feature]]       
+        end
       end
 
       pdf.move_down 35
-      pdf.table data, :border_width => 0, :widths => {0 => 30, 1 => 450, 2 => 30}
+      pdf.table data, :border_width => 0, :widths => {0 => 30, 1 => 360, 2 => 100, 3 => 30}, :headers => ["", "", "Last Changed", ""]
     end
 
     def clear_footer
@@ -81,7 +86,7 @@ module FeaturesReport
         pdf.move_down 4
         scenario.steps.each do |step|
           next if step.is_a?(Cucumber::Tree::RowStep) # TODO: deal with these
-
+          
           pdf.text step.keyword + " " + step.name, STEP_STYLE
         end
         pdf.move_down 10

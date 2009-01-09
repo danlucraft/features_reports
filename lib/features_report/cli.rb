@@ -7,7 +7,12 @@ module FeaturesReport
       end
 
       reader = Reader.new(ARGV)
-      generator = Generator.new(reader, opts)
+      if defined?(Grit) and Git.git_repo?(ARGV.first)
+        git = Git.new(ARGV)
+      else
+        git = nil
+      end
+      generator = Generator.new(reader, git, opts)
       generator.generate
     end
   end
