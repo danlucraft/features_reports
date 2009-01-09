@@ -22,7 +22,8 @@ Generates a PDF report of a set of Cucumber features.
   features_report features/*/*.features
 
 == REQUIREMENTS:
-
+ 
+ * Trollop
  * Cucumber
  * Prawn
  * Grit (optional, needed for git only features)

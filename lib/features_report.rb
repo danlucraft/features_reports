@@ -8,6 +8,7 @@ end
 
 require 'rubygems'
 require 'prawn'
+require 'trollop'
 
 require 'features_report/reader'
 require 'features_report/generator'

@@ -18,7 +18,8 @@ module FeaturesReport
     end
     
     def features
-      files.map do |file|
+      return @features if @features
+      @features = files.map do |file|
         parser.parse_feature(file)
       end
     end
