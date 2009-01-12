@@ -6,10 +6,12 @@ require File.dirname(__FILE__) + '/lib/features_report'
 $hoe = Hoe.new('features_report', FeaturesReport::VERSION) do |p|
   p.developer('Daniel Lucraft', 'dan@fluentradical.com')
   p.changes              = p.paragraphs_of("History.txt", 0..1).join("\n\n")
-  p.rubyforge_name       = p.name # TODO this is default value
-  # p.extra_deps         = [
-  #   ['activesupport','>= 2.0.2'],
-  # ]
+  p.rubyforge_name       = "features_report" # TODO this is default value
+  p.extra_deps           = [
+                            ['trollop','>= 1.10.2'],
+                            ['cucumber', '>= 0.1.14'],
+                            ['prawn', '>= 0.3.0']
+                           ]
   p.extra_dev_deps = [
     ['newgem', ">= #{::Newgem::VERSION}"]
   ]

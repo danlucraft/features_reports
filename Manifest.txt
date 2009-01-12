@@ -9,7 +9,6 @@ lib/features_report/cucumber/tree/feature.rb
 lib/features_report/generator.rb
 lib/features_report/git.rb
 lib/features_report/reader.rb
-patch
 spec/cucumber/tree/feature_spec.rb
 spec/features_report_spec.rb
 spec/fixtures/features.pdf
